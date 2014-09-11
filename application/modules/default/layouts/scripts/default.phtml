@@ -1,0 +1,307 @@
+<?php
+
+$frontControllerName = Zend_Controller_Front::getInstance()->getRequest()->getControllerName();
+$frontActionName     = Zend_Controller_Front::getInstance()->getRequest()->getActionName();
+
+$this->headTitle('Lepard Geko')->setSeparator(' | ');
+
+$this->headMeta()->prependHttpEquiv('Content-Type','text/html; charset=UTF-8');
+$this->headMeta()->prependHttpEquiv('X-UA-Compatible','IE=edge');
+$this->headMeta()->prependHttpEquiv('content-language',strtolower(str_replace('_','-',Zend_Registry::get('Zend_Locale'))));
+
+$this->headLink()->appendStylesheet($this->baseUrl('css/reset.css'),'screen');
+$this->headLink()->appendStylesheet($this->baseUrl('assets/css/bootstrap.min.css'),'screen');
+$this->headLink()->appendStylesheet($this->baseUrl('assets/css/bootstrap-responsive.min.css'),'screen');
+$this->headLink()->appendStylesheet($this->baseUrl('assets/css/font-awesome.min.css'),'screen');
+
+$this->headLink()->appendStylesheet($this->baseUrl('assets/css/jquery-ui-1.10.3.custom.min.css'),'screen');
+$this->headLink()->appendStylesheet($this->baseUrl('assets/css/jquery.gritter.css'),'screen');
+
+$this->headLink()->appendStylesheet($this->baseUrl('assets/css/ace.min.css'),'screen');
+$this->headLink()->appendStylesheet($this->baseUrl('assets/css/ace-responsive.min.css'),'screen');
+$this->headLink()->appendStylesheet($this->baseUrl('assets/css/ace-skins.min.css'),'screen');
+$this->headLink()->appendStylesheet($this->baseUrl('css/site.css'),'screen');
+$this->headLink()->appendStylesheet($this->baseUrl('assets/css/datepicker.css'),'screen');
+$this->headLink()->appendStylesheet($this->baseUrl('assets/css/daterangepicker.css'),'screen');
+
+//$this->headLink(array('rel' => 'shortcut icon','href' => $this->url(array(),'media-index') . 'styles/default/images/favicon.png'));
+//$this->headLink(array('rel' => 'canonical','href' => $this->url()));
+$this->headScript()->appendFile($this->baseUrl('js/jquery.min.2.1.1.js'));
+$this->headScript()->appendFile($this->baseUrl('assets/js/bootstrap.min.js'));
+$this->headScript()->appendFile($this->baseUrl('assets/js/jquery-ui-1.10.3.custom.min.js'));
+$this->headScript()->appendFile($this->baseUrl('assets/js/jquery.ui.touch-punch.min.js'));
+$this->headScript()->appendFile($this->baseUrl('assets/js/bootbox.min.js'));
+$this->headScript()->appendFile($this->baseUrl('assets/js/jquery.gritter.min.js'));
+$this->headScript()->appendFile($this->baseUrl('assets/js/spin.min.js'));
+$this->headScript()->appendFile($this->baseUrl('assets/js/ace-elements.min.js'));
+$this->headScript()->appendFile($this->baseUrl('assets/js/date-time/moment.min.js'));
+$this->headScript()->appendFile($this->baseUrl('assets/js/date-time/bootstrap-datepicker.min.js'));
+$this->headScript()->appendFile($this->baseUrl('assets/js/date-time/daterangepicker.min.js'));
+$this->headScript()->appendFile($this->baseUrl('assets/js/ace.min.js'));
+$this->headScript()->appendFile($this->baseUrl('assets/js/jquery.dataTables.min.js'));
+$this->headScript()->appendFile($this->baseUrl('assets/js/jquery.dataTables.bootstrap.js'));
+$this->headScript()->appendFile($this->baseUrl('js/site.js'));
+
+//$this->headScript()->appendFile($this->baseUrl('scripts/library/jquery.animate.easing/jquery.easing.1.3.js'));
+//$this->headScript()->appendFile($this->baseUrl('scripts/library/jquery.masonry/jquery.masonry.min.js'));
+//$this->headScript()->appendFile($this->baseUrl('scripts/library/jquery.form.mask/jquery.meio.mask.min.js'));
+/*
+$this->headScript()->appendFile($this->baseUrl('scripts/library/cufon/cufon-yui.js'));
+$this->headScript()->appendFile($this->baseUrl('scripts/default/cufon/GothamLight_300.font.js'));
+$this->headScript()->appendFile($this->baseUrl('scripts/default/cufon/GothamMedium_500.font.js'));
+$this->headScript()->appendFile($this->baseUrl('scripts/default/cufon/GothamBold_700.font.js'));
+$this->headScript()->appendFile($this->baseUrl('scripts/default/cufon/Myriad_400.font.js'));
+*/
+//$this->headScript()->appendFile($this->baseUrl('scripts/default/site.js'));
+
+?>
+<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400,300" />
+
+<?php echo '<?xml version="1.0" encoding="UTF-8" ?>' . "\r\n"; ?>
+<?php echo $this->doctype()->__toString() . "\r\n"; ?>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?= strtolower(str_replace('_','-',Zend_Registry::get('Zend_Locale'))) ?>" dir="ltr">
+
+	<head>
+<?php 
+
+echo $this->headTitle()->toString() . "\r\n";
+echo $this->headMeta()->toString() . "\r\n";
+echo (APPLICATION_ENV != 'adevelopment' ? $this->headLink()->toString() : $this->compressStyle()) . "\r\n";
+echo (APPLICATION_ENV != 'adevelopment' ? $this->headScript()->toString() :  $this->compressScript()) . "\r\n";
+echo $this->navigation()->setRole('Guest')->links();
+
+?>
+	</head>
+
+	<body class="site-<?php echo $frontControllerName; ?> site-<?php echo $frontControllerName . '-' . $frontActionName; ?>">
+
+		<?php /* HEADER PRINCIPAL*/ ?>
+		<div class="navbar">
+			<div class="navbar-inner">
+				<div class="container-fluid">
+					<a href="/" class="brand">
+						Geko
+					</a>
+				</div>
+			</div>
+		</div>
+		<?php /* FIM HEADER PRINCIPAL*/ ?>
+
+		<?php /* CONTAINER PRINCIPAL*/ ?>
+		<div class="main-container container-fluid">
+
+			<?php 
+				/* MENU quando navegador for pequeno*/  
+			?>
+				<a class="menu-toggler" id="menu-toggler" href="#">
+					<span class="menu-text"></span>
+				</a>
+				<?php /* FIM MENU quando navegador for pequeno*/  ?>
+
+				<?php /*MENU*/  ?>
+				<div class="sidebar" id="sidebar">
+					<?php 
+						if (Zend_Auth::getInstance()->hasIdentity()) {
+							$cliente = (array)Zend_Auth::getInstance()->getIdentity();
+							$cliente_is_admin = $cliente["is_admin"];
+
+						/* MENU quando navegador for pequeno*/  
+					?>
+					<ul class="nav nav-list">
+						<li class="usuario">
+							<a href="#" class="dropdown-toggle">
+								<i class="icon-group"></i>
+								<span class="menu-text"> Usuários </span>
+								<b class="arrow icon-angle-down"></b>
+							</a>
+
+							<ul class="submenu">
+								<li class="usuario-add">
+									<a href="/usuario/add">
+										<i class="icon-double-angle-right"></i>
+										Cadastrar
+									</a>
+								</li>
+								<li class="relatorio-listar-usuarios">
+									<a href="/relatorio/listar-usuarios">
+										<i class="icon-double-angle-right"></i>
+										Listagem de Usuários
+									</a>
+								</li>
+							</ul>
+						</li>
+						<li class="arquivo">
+							<a href="#" class="dropdown-toggle">
+								<i class="icon-file"></i>
+								<span class="menu-text"> Arquivos </span>
+								<b class="arrow icon-angle-down"></b>
+							</a>
+
+							<ul class="submenu">
+								<li class="arquivo-enviar">
+									<a href="/arquivo/enviar">
+										<i class="icon-double-angle-right"></i>
+										Enviar Arquivos
+									</a>
+								</li>
+								<li class="arquivo-popular-tabelas">
+									<a href="/arquivo/popular-tabelas">
+										<i class="icon-double-angle-right"></i>
+										Processar Dados
+									</a>
+								</li>
+							</ul>
+						</li>
+						<?php /* ?>
+						<!--
+						<li>
+							<a href="#" class="dropdown-toggle">
+								<i class="icon-building"></i>
+								<span class="menu-text"> Estabelecimentos </span>
+								<b class="arrow icon-angle-down"></b>
+							</a>
+
+							<ul class="submenu">
+								<li class="estabelecimento-cadastrar-matriz">
+									<a href="/estabelecimento/cadastrar-matriz">
+										<i class="icon-double-angle-right"></i>
+										Cadastrar Matriz
+									</a>
+								</li>
+								<li class="estabelecimento-cadastrar">
+									<a href="/estabelecimento/cadastrar">
+										<i class="icon-double-angle-right"></i>
+										Cadastrar Submissor
+									</a>
+								</li>
+							</ul>
+						</li>--> <?php */ ?>
+						<li>
+							<a href="#" class="dropdown-toggle">
+								<i class="icon-list"></i>
+								<span class="menu-text"> Relatórios</span>
+								<b class="arrow icon-angle-down"></b>
+							</a>
+
+							<ul class="submenu">
+								<li class="relatorio-pedido">
+									<a href="#">
+										<i class="icon-double-angle-right"></i>
+										Pedido
+									</a>
+								</li>
+								<li class="relatorio-index-1">
+									<a href="/relatorio/index/rel/1">
+										<i class="icon-double-angle-right"></i>
+										Resumo de operações
+									</a>
+								</li>
+								<li>
+									<a href="/relatorio/index/rel/2">
+										<i class="icon-double-angle-right"></i>
+										Comprovante de Vendas
+									</a>
+								</li>
+								<li class="relatorio-listagem-arquivos">
+									<a href="/relatorio/listagem-arquivos">
+										<i class="icon-double-angle-right"></i>
+										Listagem de Arquivos
+									</a>
+								</li>
+								<li class="relatorio-listar-estabelecimentos">
+									<a href="/relatorio/listar-estabelecimentos">
+										<i class="icon-double-angle-right"></i>
+										Listar Estabelecimentos
+									</a>
+								</li>
+							</ul>
+						</li>
+						<li>
+							<a href="#" class="dropdown-toggle">
+								<i class="icon-credit-card"></i>
+								<span class="menu-text"> Títulos</span>
+								<b class="arrow icon-angle-down"></b>
+							</a>
+
+							<ul class="submenu">
+								<li class="pedido-baixa-titulo">
+									<a href="/pedido/baixa-titulo">
+										<i class="icon-double-angle-right"></i>
+										Baixa de Títulos
+									</a>
+								</li>
+								<li class="pedido-criar-titulos">
+									<a href="/pedido/criar-titulos">
+										<i class="icon-double-angle-right"></i>
+										Sincronizar Pedidos
+									</a>
+								</li>
+							</ul>
+						</li>
+						<li>
+							<a href="/index/logout">
+								<i class="icon-off"></i>
+								<span class="menu-text"> Logout </span>
+							</a>
+						</li>
+					</ul>
+					<?php } ?>
+				</div>
+			<?php 
+				/* FIM MENU*/ 
+			?>
+
+			<?php /* CONTENT PRINCIPAL*/ ?>
+			<div class="main-content">
+
+				<?php /*Breadcrumbs*/ ?>
+				<div class="breadcrumbs" id="breadcrumbs">
+					<ul class="breadcrumb">
+						<li>
+							<span><?php echo $this->pagina_modulo; ?></span>
+
+							<span class="divider">
+								<i class="icon-angle-right arrow-icon"></i>
+							</span>
+						</li>
+						<li class="active"><?php echo $this->pagina_action; ?></li>
+					</ul><!--.breadcrumb-->
+				</div>
+				<?php /*FIM Breadcrumbs*/ ?>
+
+				<?php /* PAGE CONTENT */ ?>
+				<div class="page-content">
+
+					<?php /* PAGE CABECALHO */ ?>
+					<div class="page-header position-relative">
+					  <h1>
+					    <?php echo $this->pagina_action; ?>
+					    <small>
+					      <i class="icon-double-angle-right"></i>
+					      <?php echo $this->pagina_descricao; ?>
+					    </small>
+					  </h1>
+					</div>
+					<?php /* FIM PAGE CABECALHO */ ?>
+
+					<?php /* CONTEUDO VIEW */ ?>
+					<?php echo $this->layout()->content ?>
+					<?php /* FIM CONTEUDO VIEW */ ?>
+
+				</div>
+				<?php /* FIM PAGE CONTENT */ ?>
+
+			</div>
+			<?php /* FIM CONTENT PRINCIPAL*/ ?>
+
+		</div>
+		<?php /* CONTAINER PRINCIPAL*/ ?>
+		<script type="text/javascript">
+			 $(function(){
+				$(".<?php echo $frontControllerName.'-'.$frontActionName; ?>").toggleClass("active").parents("li:first").toggleClass("open active");
+			});
+		</script>
+
+	</body>
+
+</html>
